@@ -31,6 +31,9 @@ Watch:
 <img src="screenshots/watch_main.png" height="200" alt="Screenshot"/>
 <img src="screenshots/watch_vote.png" height="200" alt="Screenshot"/>
 
+## APK Files
+Please find the apk files in the Apk/ folder
+
 ## Acknowledgments
 
 * CS 160 course staff for starter code
