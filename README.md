@@ -1,14 +1,21 @@
 # PROG 02: Represent!
 
-Briefly describe your app here.
+####Application Name:####
+
+Find My Reps!
+
+####Description:####
+
+This application allows a user to input a ZIP code (or use their current location) and find detailed information about the Congressional representatives for that area. There is also a Android Watch interface to swipe through representatives, or use a "shake" gesture to select a random location. The next part of the project will use APIs to utilize real congressinonal data.
 
 ## Authors
 
-FirstName LastName ([your_email@berkeley.edu](mailto:your_email@berkeley.edu))
+Ryan Casey ([rcasey@berkeley.edu](mailto:rcasey@berkeley.edu))
 
 ## Demo Video
 
-See [your demo video title here] (https://link_to_your_video)
+See [PROG 02-B: Find My Reps!] (https://youtu.be/rUb_mjl1Tpg)
+
 
 ## Screenshots
 
@@ -16,5 +23,5 @@ See [your demo video title here] (https://link_to_your_video)
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Any other support
+* CS 160 course staff for starter code
+* Android docs 
