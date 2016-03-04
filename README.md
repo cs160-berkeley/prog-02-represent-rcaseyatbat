@@ -1,6 +1,5 @@
 # PROG 02: Represent!
 
-Briefly describe your app here.
 ####Application Name:####
 
 Find My Reps!
