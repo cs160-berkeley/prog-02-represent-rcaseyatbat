@@ -19,7 +19,20 @@ See [PROG 02-B: Find My Reps!] (https://youtu.be/rUb_mjl1Tpg)
 
 ## Screenshots
 
-<img src="screenshots/main.png" height="400" alt="Screenshot"/>
+Mobile:
+
+<img src="screenshots/mobile_main.png" height="400" alt="Screenshot"/>
+<img src="screenshots/mobile_congressional.png" height="400" alt="Screenshot"/>
+<img src="screenshots/mobile_detailed.png" height="400" alt="Screenshot"/>
+
+Watch:
+
+<img src="screenshots/watch_home.png" height="200" alt="Screenshot"/>
+<img src="screenshots/watch_main.png" height="200" alt="Screenshot"/>
+<img src="screenshots/watch_vote.png" height="200" alt="Screenshot"/>
+
+## APK Files
+Please find the apk files in the Apk/ folder
 
 ## Acknowledgments
 
