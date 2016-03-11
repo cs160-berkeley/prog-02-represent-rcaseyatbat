@@ -1,6 +1,9 @@
 package com.example.rcasey.findmyreps;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -11,7 +14,17 @@ import android.widget.TextView;
 import android.view.View;
 import android.widget.ImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Vector;
 
 public class DetailedView extends AppCompatActivity {
 
@@ -22,8 +35,11 @@ public class DetailedView extends AppCompatActivity {
     TextView mTermText;
     ImageView mImage;
 
+    String mZipString;
+
     String rep_name = "";
     String rep_party = "";
+    String rep_term = "2016-11-2";
     int rep_image = 0;
 
 
@@ -44,30 +60,125 @@ public class DetailedView extends AppCompatActivity {
 
         final Integer selection = Integer.parseInt(extras.getString("Item"));
         final Integer zip = Integer.parseInt(extras.getString("ZIP"));
-        Log.v("T", "Inside selection: " + selection);
 
-        mTextView.setText("ZIP: " + zip.toString());
+        Log.v("T", "Inside selection: " + selection + "  for zip: " + zip);
 
-        if (selection  == 0) {
-            //mNameText.setText();
-            rep_name = "Barbara Boxer";
-            rep_party = "Democrat";
-            rep_image = R.drawable.boxer;
+        String zipString = zip.toString();
+        if (zip < 10000) {
+            zipString = "0" + zipString;
+        }
+        mZipString = zipString;
 
-        } else if (selection == 1) {
-            rep_name = "Diane Feinstein";
-            rep_party = "Democrat";
-            rep_image = R.drawable.feinstein;
+        mTextView.setText("ZIP: " + mZipString);
 
-        } else if (selection == 2) {
-            rep_name = "Steve Knight";
-            rep_party = "Republican";
-            rep_image = R.drawable.knight;
+        String bioguideID = null;
+
+        // Get the info from the Congressional Representative at index "selection"
+        // Importantly, grab the bioguide_id
+        try {
+            String stringUrl = "http://congress.api.sunlightfoundation.com/legislators/locate?zip=" + mZipString + "&apikey=d95aad655d6e4990a811453fe43b134f";
+            DownloadWebpageTask a = new DownloadWebpageTask();
+            String result = a.execute(stringUrl).get();
+            Log.v("T", "Read JSON from Sunlight: " + result);
+
+            JSONObject jObject = new JSONObject(result);
+            JSONArray jArray = jObject.getJSONArray("results");
+            int count = jObject.getInt("count");
+            JSONObject repData = jArray.getJSONObject(selection);
+            bioguideID = repData.getString("bioguide_id");
+            String first_name = repData.getString("first_name");
+            String last_name = repData.getString("last_name");
+            String party = repData.getString("party");
+            String term_end = repData.getString("term_end");
+
+            rep_name = first_name + " " + last_name;
+            if (party.equals("D")) {
+                rep_party = "Party: Democrat";
+            } else if (party.equals("R")) {
+                rep_party = "Party: Republican";
+            } else {
+                rep_party = "Party: Independent";
+            }
+            rep_term = "Term end: " + term_end;
+            Log.v("T", "bioguide: " + bioguideID);
+
+        } catch (Exception e) {
+            Log.v("T", "Couldn't read Sunlight webpage: Exception: " + e);
         }
 
+
+        // Find a list of bills that the member has sponsored
+        String[] billList = {};
+        try {
+            String bioguideURL = "http://congress.api.sunlightfoundation.com/bills/search?sponsor_id=" + bioguideID + "&apikey=d95aad655d6e4990a811453fe43b134f";
+
+            DownloadWebpageTask billsWebpage = new DownloadWebpageTask();
+            String result = billsWebpage.execute(bioguideURL).get();
+            Log.v("T", "Read JSON from Sunlight: " + result);
+
+            JSONObject jObject = new JSONObject(result);
+            JSONArray jArray = jObject.getJSONArray("results");
+            int count = jObject.getInt("count");
+            billList = new String[count];
+
+            for (int i=0; i < jArray.length(); i++) {
+                JSONObject billData = jArray.getJSONObject(i);
+
+                String title = billData.getString("short_title");
+                if (title.equals("null")) {
+                    title = billData.getString("official_title").toUpperCase();
+                }
+                String date = billData.getString("introduced_on");
+                //Log.v("T", "Read Bill: " + title);
+                billList[i] = title + " (" + date + ")";
+            }
+        } catch (Exception e) {
+            Log.v("T", "Couldn't read Sunlight bill data: Exception: " + e);
+        }
+
+        // Find the committees that the member serves on
+        String[] committeeList = {};
+        try {
+            String committeeURL = "http://congress.api.sunlightfoundation.com/committees?member_ids=" + bioguideID + "&apikey=d95aad655d6e4990a811453fe43b134f";
+
+            DownloadWebpageTask billsWebpage = new DownloadWebpageTask();
+            String result = billsWebpage.execute(committeeURL).get();
+
+            JSONObject jObject = new JSONObject(result);
+            JSONArray jArray = jObject.getJSONArray("results");
+            int count = jObject.getInt("count");
+            committeeList = new String[count];
+
+            for (int i=0; i < jArray.length(); i++) {
+                JSONObject billData = jArray.getJSONObject(i);
+
+                String name = billData.getString("name");
+                committeeList[i] = name;
+            }
+        } catch (Exception e) {
+            Log.v("T", "Couldn't read Sunlight bill data: Exception: " + e);
+        }
+
+        //image url
+        //https://theunitedstates.io/images/congress/225x275/D000623.jpg
+
+
         mNameText.setText(rep_name);
-        mPartyText.setText("Party: " + rep_party);
-        mImage.setImageResource(rep_image);
+        mPartyText.setText(rep_party);
+        mTermText.setText(rep_term);
+        //mImage.setImageResource(rep_image);
+
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String imageURL = "https://theunitedstates.io/images/congress/225x275/" + bioguideID + ".jpg";
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(imageURL).getContent());
+            mImage.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            Log.v("T", "Couldn't load image: " + e);
+        }
+
 
         mButton.setOnClickListener(new View.OnClickListener() {
             //@Override
@@ -75,7 +186,8 @@ public class DetailedView extends AppCompatActivity {
 
                 // Go back to the Congressional View Page
                 Intent sendCongress = new Intent(getBaseContext(), CongressionalViewActivity.class);
-                sendCongress.putExtra("ZIP", zip);
+                sendCongress.putExtra("ZIP", mZipString);
+                sendCongress.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(sendCongress);
 
             }
@@ -84,11 +196,19 @@ public class DetailedView extends AppCompatActivity {
 
         final ListView committee_list = (ListView) findViewById(R.id.committee_listView);
 
-        // storing string resources into Array
-        String[] items = {"Committee on the Environment","Leglislative Bill #2","Committee of Foreign Affairs","Leglislative Bill #3"};
+        // Construct a final list of Committees and then Bills
+        int finalList_length = committeeList.length + billList.length;
+        String[] finalList = new String[finalList_length];
 
-        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        for (int i=0; i < committeeList.length; i++) {
+            finalList[i] = committeeList[i];
+        }
+        for (int j=0; j < billList.length; j++) {
+            finalList[j + committeeList.length] = billList[j];
+        }
 
+        // Create and set the adapter
+        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, finalList);
         committee_list.setAdapter(itemsAdapter);
 
     }

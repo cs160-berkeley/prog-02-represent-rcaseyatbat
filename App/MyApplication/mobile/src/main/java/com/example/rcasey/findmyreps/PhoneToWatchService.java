@@ -59,7 +59,7 @@ public class PhoneToWatchService extends Service {
         Bundle extras = intent.getExtras();
         Log.v("T", "got extras");
         //final String catName = extras.getString("CAT_NAME");
-        final Integer new_zip = extras.getInt("ZIP");
+        final String new_zip = extras.getString("ZIP");
 
         // Send the message with the cat name
         new Thread(new Runnable() {
@@ -68,14 +68,14 @@ public class PhoneToWatchService extends Service {
                 //first, connect to the apiclient
                 mApiClient.connect();
                 //now that you're connected, send a massage with the cat name
-                sendMessage("/ZIP", new_zip.toString());
+                sendMessage("/ZIP", new_zip);
             }
         }).start();
 
         return START_STICKY;
     }
 
-    @Override //remember, all services need to implement an IBiner
+    @Override //remember, all services need to implement an IBinder
     public IBinder onBind(Intent intent) {
         return null;
     }

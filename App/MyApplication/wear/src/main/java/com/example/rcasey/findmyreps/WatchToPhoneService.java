@@ -84,8 +84,8 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
 
                         if (message_type.equals("ZIP")) {
                             Log.d("T", "Sending New Zip Message");
-                            Integer new_zip = mIntent.getExtras().getInt("ZIP");
-                            sendMessage("/new_zip", new_zip.toString());
+                            String new_zip = mIntent.getExtras().getString("ZIP");
+                            sendMessage("/new_zip", new_zip);
                         } else if (message_type.equals("SELECTION")) {
                             Integer selection = mIntent.getExtras().getInt("I");
 

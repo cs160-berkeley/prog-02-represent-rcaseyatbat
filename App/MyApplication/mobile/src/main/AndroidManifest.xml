@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rcasey.findmyreps">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
     <application
         android:allowBackup="true"
@@ -29,6 +31,13 @@
 
         <activity android:name=".CongressionalViewActivity" />
         <activity android:name=".DetailedView"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBOiK0pEo0xtr2V2NgpgsZ57iqvY98HtLk"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="2aafbaeb29df997733611fd87d60b3340391de16" />
     </application>
 
 </manifest>

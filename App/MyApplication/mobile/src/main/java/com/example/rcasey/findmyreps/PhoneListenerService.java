@@ -35,10 +35,11 @@ public class PhoneListenerService extends WearableListenerService {
             //int new_random_zip = r.nextInt(99999 - 10000) + 10000;
             //Log.d("T", "New random zip: " + new_random_zip);
             String stringData = new String(messageEvent.getData());
-            Integer new_random_zip = Integer.parseInt(stringData);
+            String new_random_zip = stringData;
 
+            Log.d("T", "PhoneListener, new zip: " + new_random_zip);
             // Send the intent to the CongressionViewActivity
-            Intent sendCongress = new Intent(getBaseContext(), CongressionalViewActivity.class);
+            Intent sendCongress = new Intent(getBaseContext(), MainActivity.class);
             sendCongress.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             sendCongress.putExtra("ZIP", new_random_zip);
             startActivity(sendCongress);

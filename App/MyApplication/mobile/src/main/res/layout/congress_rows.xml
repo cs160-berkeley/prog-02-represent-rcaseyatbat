@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:twittersdk="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
@@ -56,20 +57,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Email: boxer@us.gov"
                 android:id="@+id/email_text"
                 android:layout_gravity="center_horizontal"
-                android:autoLink="email" />
+                android:autoLink="email"
+                android:textSize="12dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Website: bboxer.org"
                 android:id="@+id/website_text"
                 android:layout_gravity="center_horizontal"
-                android:autoLink="web" />
+                android:autoLink="web"
+                android:textSize="12dp"/>
 
         </LinearLayout>
 
@@ -83,6 +86,7 @@
         android:text="(Tap Picture for More Info)"
         android:id="@+id/textView" />
 
+    <!--
     <ImageView
         android:layout_width="250dp"
         android:layout_height="139dp"
@@ -90,11 +94,57 @@
         android:src="@drawable/boxer_tweet"
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="false" />
+        -->
+
+    <!--
+    <com.twitter.sdk.android.tweetui.CompactTweetView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/twitter_item"
+        android:layout_gravity="center_horizontal"
+        twittersdk:tw__tweet_id="510908133917487104" />
+        -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/textView4" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="31dp"
+            android:layout_height="28dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/twitter" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Latest Tweet From @SenatorBoxer"
+            android:id="@+id/twitterID_text"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Last Tweet"
+        android:id="@+id/tweet_text"
+        android:layout_gravity="center_horizontal" />
+
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@android:color/black"/>
-
+        android:layout_height="10dp"
+        android:background="@android:color/black" />
 
 
 </LinearLayout>
