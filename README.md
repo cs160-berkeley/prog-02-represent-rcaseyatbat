@@ -41,3 +41,6 @@ Please find the apk files in the Apk/ folder
 
 * CS 160 course staff for starter code
 * Android docs 
+* Twitter Fabric API
+* Google Geocoding/Location API
+* Sunlight API
